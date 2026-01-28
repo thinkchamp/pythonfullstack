@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Full Stack Workshop | Think Champ</title>
+    <style>
+        /* --- CSS VARIABLES & RESET --- */
+        :root {
+            --primary: #4F46E5;
+            --primary-dark: #3730A3;
+            --accent: #F59E0B;
+            --gold: #FFD700;
+            --dark-bg: #0F172A;
+            --light-bg: #F8FAFC;
+            --text-dark: #1E293B;
+            --text-light: #94A3B8;
+            --white: #ffffff;
+            --success: #10B981;
+            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--light-bg);
+            color: var(--text-dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* --- HERO / BANNER SECTION --- */
+        .hero {
+            position: relative;
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+            min-height: auto; /* Changed from 90vh to allow content to dictate height on mobile */
+            padding: 80px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            overflow: hidden;
+        }
+
+        /* Abstract Background shapes */
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -100px;
+            right: -100px;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(79, 70, 229, 0.3) 0%, rgba(0,0,0,0) 70%);
+            border-radius: 50%;
+            z-index: 1;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: -50px;
+            left: -100px;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(245, 158, 11, 0.2) 0%, rgba(0,0,0,0) 70%);
+            border-radius: 50%;
+            z-index: 1;
+        }
+
+        .hero-container {
+            position: relative;
+            z-index: 2;
+            max-width: 1200px;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        /* Left Side: Info */
+        .hero-info h1 {
+            font-size: 3.5rem;
+            line-height: 1.1;
+            font-weight: 800;
+            margin-bottom: 20px;
+            background: linear-gradient(to right, #fff, #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-details {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .detail-item {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 8px 18px;
+            border-radius: 50px;
+            border: 1px solid rgba(255,255,255,0.2);
+            font-size: 0.9rem;
+        }
+
+        .detail-item svg {
+            width: 18px;
+            height: 18px;
+            margin-right: 8px;
+            fill: var(--accent);
+        }
+
+        .highlight-box {
+            background: rgba(79, 70, 229, 0.2);
+            border-left: 4px solid var(--accent);
+            padding: 15px;
+            margin-bottom: 25px;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .highlight-box p {
+            margin: 0;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .certifications {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            font-size: 0.8rem;
+            color: var(--text-light);
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            flex-wrap: wrap;
+        }
+
+        .cert-tag {
+            background: #1e293b;
+            padding: 4px 10px;
+            border-radius: 4px;
+            color: var(--accent);
+            border: 1px solid var(--accent);
+        }
+
+        .cert-price-info {
+            background: linear-gradient(90deg, rgba(255, 215, 0, 0.1), transparent);
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            padding: 10px 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            display: inline-flex;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.1);
+        }
+        
+        .cert-price-info span {
+            margin-right: 8px;
+            font-size: 1.1rem;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: var(--accent);
+            color: #000;
+            padding: 18px 40px;
+            font-size: 1.1rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 20px rgba(245, 158, 11, 0.4);
+            position: relative;
+            overflow: hidden;
+            width: fit-content;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            background: #fbbf24;
+            box-shadow: 0 0 30px rgba(245, 158, 11, 0.6);
+        }
+
+        /* Right Side: Trainer Card */
+        .trainer-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+            animation: float 6s ease-in-out infinite;
+            max-width: 450px;
+            margin: 0 auto;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .trainer-img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid var(--accent);
+            margin-bottom: 20px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+
+        .trainer-role {
+            color: var(--accent);
+            font-weight: 700;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+
+        .trainer-name {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--white);
+        }
+
+        .trainer-exp {
+            font-size: 1rem;
+            color: var(--text-light);
+            margin-bottom: 20px;
+            display: inline-block;
+            background: rgba(255,255,255,0.05);
+            padding: 5px 15px;
+            border-radius: 20px;
+        }
+
+        /* --- CURRICULUM SECTION --- */
+        .main-content {
+            max-width: 1100px;
+            margin: -40px auto 0; /* Reduced overlap on mobile */
+            position: relative;
+            z-index: 5;
+            padding: 0 20px 60px;
+        }
+
+        .section {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease;
+            border-left: 6px solid transparent;
+        }
+
+        /* Topic Colors */
+        .topic-python { border-left-color: #3776AB; }
+        .topic-html { border-left-color: #E34F26; }
+        .topic-css { border-left-color: #1572B6; }
+        .topic-flask { border-left-color: #000000; }
+        .topic-sql { border-left-color: #F29111; }
+
+        .section h2 {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            color: var(--text-dark);
+            font-size: 1.5rem;
+        }
+
+        .section h2 svg {
+            width: 32px;
+            height: 32px;
+            margin-right: 15px;
+            flex-shrink: 0; /* Prevents icon from squishing */
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        ul li {
+            position: relative;
+            padding-left: 30px;
+            margin-bottom: 12px;
+            color: #475569;
+        }
+
+        ul li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--success);
+            font-weight: bold;
+        }
+
+        .practice-box {
+            background-color: #EFF6FF;
+            border: 1px dashed var(--primary);
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 8px;
+            color: var(--primary-dark);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+        }
+
+        .practice-box span {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+
+        /* Project Section */
+        .project-card {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            text-align: center;
+        }
+        
+        .project-card h2 { justify-content: center; color: white; }
+        .project-card ul li { color: #e2e8f0; }
+        .project-card ul li::before { color: var(--accent); }
+
+        /* --- FOOTER --- */
+        footer {
+            background: #0f172a;
+            color: #64748b;
+            text-align: center;
+            padding: 40px 20px;
+            border-top: 1px solid #1e293b;
+            margin-top: auto;
+        }
+
+        footer strong { color: var(--white); }
+
+
+        /* --- RESPONSIVE MOBILE DESIGN --- */
+        @media (max-width: 768px) {
+            
+            /* Hero Layout */
+            .hero {
+                padding: 60px 20px; /* Reduced top padding */
+                min-height: auto;
+            }
+
+            .hero-container {
+                grid-template-columns: 1fr; /* Stack vertically */
+                gap: 50px;
+                text-align: center; /* Center everything */
+            }
+
+            /* Typography */
+            .hero-info h1 {
+                font-size: 2.2rem; /* Manageable size for mobile */
+                margin-bottom: 15px;
+            }
+
+            .section h2 {
+                font-size: 1.25rem;
+                justify-content: center;
+                text-align: center;
+            }
+            
+            /* Detail Items */
+            .hero-details {
+                justify-content: center;
+            }
+
+            .detail-item {
+                width: 100%;
+                justify-content: center;
+                padding: 8px 10px;
+                font-size: 0.85rem;
+            }
+
+            /* Certificate Info */
+            .certifications {
+                justify-content: center;
+            }
+
+            .cert-price-info {
+                width: 100%;
+                justify-content: center;
+                margin-bottom: 25px;
+            }
+
+            /* CTA Button */
+            .cta-button {
+                width: 100%; /* Full width for easier tapping */
+                padding: 16px 0;
+                text-align: center;
+            }
+
+            /* Trainer Card */
+            .trainer-card {
+                padding: 25px 20px;
+                width: 100%;
+            }
+
+            .trainer-img {
+                width: 120px;
+                height: 120px;
+                margin-bottom: 15px;
+            }
+
+            .trainer-name {
+                font-size: 1.5rem;
+            }
+
+            /* Curriculum Section Overlap */
+            .main-content {
+                margin-top: -30px;
+                padding: 0 15px 60px;
+            }
+
+            /* Cards */
+            .section {
+                padding: 20px;
+                margin-bottom: 20px;
+            }
+
+            /* Project Lists - FIX FOR MOBILE */
+            /* Remove inline-block to prevent layout breaking */
+            .project-card ul {
+                display: block;
+                text-align: left;
+                padding-left: 20px;
+            }
+            
+            .project-card p {
+                text-align: left;
+                padding-left: 20px;
+            }
+
+        }
+        
+        /* Extra Small Screens (iPhone SE size) */
+        @media (max-width: 380px) {
+            .hero-info h1 {
+                font-size: 1.8rem;
+            }
+            .detail-item {
+                flex-direction: column;
+                padding: 10px;
+                gap: 5px;
+            }
+            .detail-item svg {
+                margin-right: 0;
+                margin-bottom: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- BANNER / HERO SECTION -->
+    <header class="hero">
+        <div class="hero-container">
+            <!-- Left: Text Content -->
+            <div class="hero-info">
+                <h1>PYTHON<br>FULL STACK<br>WORKSHOP</h1>
+                
+                <div class="hero-details">
+                    <div class="detail-item">
+                        <svg viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11zM9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm-8 4H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2z"/></svg>
+                        SUNDAY FEB 1ST
+                    </div>
+                    <div class="detail-item">
+                        <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
+                        9:00 AM - 1:30 PM
+                    </div>
+                </div>
+
+                <div class="highlight-box">
+                    <p style="color: #fca5a5; font-size: 1rem;">🔥 LIMITED SEATS: ONLY 200 SLOTS</p>
+                </div>
+
+                <div class="certifications">
+                    <span class="cert-tag">AICTE</span>
+                    <span class="cert-tag">MSME</span>
+                    <span class="cert-tag">ISO 9001:2015</span>
+                </div>
+
+                <div class="cert-price-info">
+                    <span>🏆</span> CERTIFICATE AFTER WORKSHOP
+                </div>
+
+                <a href="https://forms.gle/UTMd2WPLT6x72XrY6s" class="cta-button">Register Now</a>
+            </div>
+
+            <!-- Right: Trainer Card -->
+            <div class="trainer-card">
+                <img src="guru.jpeg" alt="Mr. Guru Lokesh" class="trainer-img">
+                <div class="trainer-role">Trainer</div>
+                <div class="trainer-name">Mr. Guru Lokesh</div>
+                <div class="trainer-role">Founder & CEO</div>
+                <p style="color:#94a3b8; margin-bottom:15px; font-size:0.9rem;">Think Champ Pvt Ltd</p>
+                <div class="trainer-exp">⭐ 9+ Years Experience</div>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT / CURRICULUM -->
+    <main class="main-content">
+
+        <!-- PYTHON -->
+        <section class="section topic-python">
+            <h2>
+                <svg viewBox="0 0 24 24" fill="#3776AB"><path d="M14.25.18l.9.2.73.26.59.3.45.32.34.34.25.34.16.33.1.3.04.26.02.2-.01.13V8.5l-.05.63-.13.55-.21.46-.26.38-.3.31-.33.25-.35.19-.35.14-.33.1-.3.07-.26.04-.21.02H8.77l-.69.05-.59.14-.5.22-.41.27-.33.32-.27.35-.2.36-.15.37-.1.35-.07.32-.04.27-.02.21v3.06H3.17l-.21-.03-.28-.07-.32-.12-.35-.18-.36-.26-.36-.36-.35-.46-.32-.59-.28-.73-.21-.88-.14-1.05-.05-1.23.06-1.22.16-1.04.24-.87.32-.71.36-.57.4-.44.42-.33.42-.24.4-.16.36-.1.32-.05.24-.01h.16l.06.01h8.16v-.83H6.18l-.01-2.75-.02-1.23.05-1.22.16-1.05.24-.87.32-.71.36-.57.4-.44.42-.33.42-.24.4-.16.36-.1.32-.05.24-.01h.16l.06.01h1.12l.9.2.73.26.59.3.45.32.34.34.25.34.16.33.1.3.04.26.02.2-.01.13V5.5h2.09l.01-2.45-.02-1.23-.06-1.22-.16-1.05-.24-.87-.32-.71-.36-.57.4-.44.42-.33.42-.24.4-.16.36-.1.32-.05.24-.01h-.16l-.06.01zm-6.3 1.98l-.23.33-.08.41.08.41.23.34.33.22.41.09.41-.09.33-.22.23-.34.08-.41-.08-.41-.23-.33-.33-.22-.41-.09-.41.09zm13.09 3.95l.28.06.32.12.35.18.36.27.36.35.35.47.32.59.28.73.21.88.14 1.04.05 1.23-.06 1.23-.16 1.04-.24.86-.32.71-.36.57-.4.45-.42.33-.42.24-.4.16-.36.09-.32.05-.24.02-.16-.01h-8.22v.82h5.84l.01 2.76.02 1.23-.05 1.23-.16 1.04-.24.87-.32.71-.36.57-.4.45-.42.33-.42.24-.4.16-.36.09-.32.05-.24.02-.16-.01H9.55l-.9-.2-.73-.27-.59-.3-.45-.32-.34-.34-.25-.34-.16-.33-.1-.3-.04-.25-.02-.2.01-.13v-5.34l.05-.64.13-.54.21-.46.26-.38.3-.32.33-.24.35-.2.35-.14.33-.1.3-.06.26-.04.21-.02.13-.01h5.84l.69-.05.59-.14.5-.21.41-.28.33-.32.27-.35.2-.36.15-.36.1-.35.07-.32.04-.28.02-.21V6.07h2.09l-.01 2.45-.02 1.23.06 1.23.16 1.04.24.86.32.71.36.57.4.45.42.33.42.24.4.16.36.09.32.05.24.02.16-.01h.16zm-6.47 14.25l-.23.33-.08.41.08.41.23.33.33.23.41.08.41-.08.33-.23.23-.33.08-.41-.08-.41-.23-.33-.33-.23-.41-.08-.41.08z"/></svg>
+                Python Topics
+            </h2>
+            <ul>
+                <li>What is Python & where it is used</li>
+                <li>Variables & Data Types</li>
+                <li>Input & Output</li>
+                <li>Conditional Statements (if, else)</li>
+                <li>Loops</li>
+                <li>Functions</li>
+                <li>Python Virtual Environment (Concept)</li>
+                <li>How Python connects with Flask</li>
+            </ul>
+        </section>
+
+        <!-- HTML -->
+        <section class="section topic-html">
+            <h2>
+                <svg viewBox="0 0 24 24" fill="#E34F26"><path d="M1.5 0h21l-1.91 21.563L11.977 24l-8.565-2.438L1.5 0zm7.031 9.75l-.232-2.718 10.059.003.23-2.622L5.412 4.41l.698 8.01h9.126l-.326 3.426-2.91.804-2.955-.81-.188-2.11H6.248l.33 4.171L12 19.351l5.379-1.443.744-8.157H8.531z"/></svg>
+                HTML Topics
+            </h2>
+            <ul>
+                <li>What is HTML & role in web applications</li>
+                <li>Basic structure (html, head, body)</li>
+                <li>Text tags (h1–h6, p)</li>
+                <li>Links & Images (a, img)</li>
+                <li>Forms & Inputs (input, label, textarea)</li>
+                <li>Input types (text, email, password)</li>
+                <li>Buttons (submit)</li>
+                <li>Form action & method (GET / POST)</li>
+            </ul>
+            <div class="practice-box">
+                <span>👉</span> Practice: Create Registration / Login Form
+            </div>
+        </section>
+
+        <!-- CSS -->
+        <section class="section topic-css">
+            <h2>
+                <svg viewBox="0 0 24 24" fill="#1572B6"><path d="M1.5 0h21l-1.91 21.563L11.977 24l-8.564-2.438L1.5 0zm17.09 4.413L5.41 4.41l.213 2.622 10.125.002-.255 2.716h-6.64l.24 2.573h6.182l-.366 3.523-2.91.804-2.956-.81-.188-2.11h-2.61l.29 3.855L12 19.288l5.373-1.53L18.59 4.414z"/></svg>
+                CSS Topics
+            </h2>
+            <ul>
+                <li>What is CSS & why needed</li>
+                <li>Inline vs Internal vs External CSS</li>
+                <li>Selectors (class, id)</li>
+                <li>Colors & Fonts</li>
+                <li>Box Model (margin, padding, border)</li>
+                <li>Styling form inputs</li>
+                <li>Button hover effect</li>
+                <li>Simple page layout using div</li>
+            </ul>
+            <div class="practice-box">
+                <span>👉</span> Practice: Style the Registration Form
+            </div>
+        </section>
+
+        <!-- FLASK -->
+        <section class="section topic-flask">
+            <h2>
+                <svg viewBox="0 0 24 24" fill="#000000"><path d="M20.8,11.4c-0.3-1.2-0.9-2.2-1.8-3.1c-0.2-0.2-0.4-0.4-0.6-0.5V7.9c0-2.7-1.6-5-3.9-5.9C14.2,0.8,13.1,0,12,0s-2.2,0.8-2.5,2 C7.2,2.9,5.6,5.2,5.6,7.9v-0.1c-0.2,0.2-0.4,0.3-0.6,0.5c-0.9,0.9-1.5,1.9-1.8,3.1c-0.3,1.4-0.1,2.8,0.6,4.1 C4.5,16.7,5.6,17.7,7,18.3l-0.4,2.6C6.5,21.6,7,22,7.5,22h9c0.5,0,1-0.4,0.9-0.9L17,18.3c1.4-0.6,2.5-1.6,3.2-2.9 C20.9,14.2,21.1,12.8,20.8,11.4z M10.5,2.5c0.3-0.5,0.9-0.9,1.5-0.9s1.2,0.4,1.5,0.9c0.3,0.5,0.3,1.1,0.1,1.6c-0.5-0.1-1-0.1-1.6-0.1 s-1.1,0-1.6,0.1C10.2,3.6,10.2,3,10.5,2.5z M16.4,16.7c-0.1,0-0.3,0-0.4,0.1c-1.2,0.5-2.5,0.7-4,0.7s-2.8-0.3-4-0.7 c-0.1,0-0.3-0.1-0.4-0.1c-1.1-0.4-1.9-1.3-2.4-2.3c-0.5-1-0.6-2.1-0.4-3.2c0.2-1,0.7-1.8,1.4-2.5c0.7-0.7,1.6-1.1,2.6-1.3 c0.9-0.1,1.9-0.2,2.9-0.2V5.3c0-0.5,0.4-0.9,0.9-0.9s0.9,0.4,0.9,0.9v1.9c1,0,2,0.1,2.9,0.2c1,0.2,1.9,0.6,2.6,1.3 c0.7,0.7,1.2,1.5,1.4,2.5c0.2,1.1,0.1,2.2-0.4,3.2C18.3,15.4,17.5,16.3,16.4,16.7z"/></svg>
+                Flask Topics
+            </h2>
+            <ul>
+                <li>What is Flask & why Flask?</li>
+                <li>Installing Flask</li>
+                <li>Flask folder structure</li>
+                <li>Creating first Flask app</li>
+                <li>Routing (@app.route)</li>
+                <li>HTTP methods (GET, POST)</li>
+                <li>Rendering HTML templates</li>
+                <li>Passing data to HTML</li>
+                <li>Handling form data</li>
+                <li>Connecting Flask with database</li>
+            </ul>
+            <div class="practice-box">
+                <span>👉</span> Practice: Open HTML page using Flask
+            </div>
+        </section>
+
+        <!-- SQL -->
+        <section class="section topic-sql">
+            <h2>
+                <svg viewBox="0 0 24 24" fill="#F29111"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg>
+                SQL Topics
+            </h2>
+            <ul>
+                <li>What is Database?</li>
+                <li>SQL vs NoSQL (Quick intro)</li>
+                <li>Tables & Records</li>
+                <li>Creating Database & Table</li>
+                <li>Insert data & Fetch data (SELECT)</li>
+                <li>Basic WHERE condition</li>
+                <li>Flask + SQL connection</li>
+                <li>Storing form data in database</li>
+            </ul>
+            <div class="practice-box">
+                <span>👉</span> Practice: Insert & Fetch user data
+            </div>
+        </section>
+
+        <!-- PROJECT -->
+        <section class="section project-card">
+            <h2>
+                <svg style="fill:white;" viewBox="0 0 24 24"><path d="M20 6h-8l-2-2H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 12H4V8h16v10z"/></svg>
+                Final Mini Project
+            </h2>
+            <!-- Lists will stack vertically on mobile via CSS -->
+            <ul>
+                <li><strong>Project Title:</strong> Student Registration Web Application</li>
+                <li>Registration Form using HTML & CSS</li>
+                <li>Backend using Python Flask</li>
+                <li>Store user details in SQL Database</li>
+                <li>Display success message & View registered users</li>
+            </ul>
+            <p style="margin-top:20px; font-weight: bold; text-decoration: underline;">Project Flow:</p>
+            <ul>
+                <li>User fills the registration form</li>
+                <li>Data sent to Flask backend</li>
+                <li>Flask stores data in database</li>
+                <li>Confirmation message shown</li>
+            </ul>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>&copy; 2026 <strong>Think Champ Pvt Ltd</strong> | Python Full Stack Workshop</p>
+        <p style="font-size: 0.8rem; margin-top: 10px;">Empowering Future Developers</p>
+    </footer>
+
+</body>
+</html>
